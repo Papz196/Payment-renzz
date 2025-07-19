@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Renzz Payment</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://wallpapercave.com/wp/wp11752750.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* Rain Effect */
+        .rain {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .drop {
+            position: absolute;
+            width: 1px;
+            height: 30px;
+            background: linear-gradient(transparent, rgba(255, 255, 255, 0.6));
+            animation: rain linear infinite;
+        }
+        
+        @keyframes rain {
+            0% {
+                transform: translateY(-100px);
+            }
+            100% {
+                transform: translateY(calc(100vh + 100px));
+            }
+        }
+        
+        /* Lightning Effect */
+        .lightning {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            opacity: 0;
+            z-index: 2;
+            pointer-events: none;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            position: relative;
+            z-index: 3;
+        }
+        
+        .welcome-text {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #ff6b6b;
+            text-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+            line-height: 1.3;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        
+        .start-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+            font-weight: 600;
+        }
+        
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.6);
+        }
+        
+        .start-btn:active {
+            transform: translateY(1px);
+        }
+        
+        .payment-section {
+            display: none;
+            margin-top: 30px;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .payment-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #74b9ff;
+        }
+        
+        .payment-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .payment-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+        }
+        
+        .payment-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+        
+        .payment-btn i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .payment-details {
+            display: none;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 4px solid #74b9ff;
+        }
+        
+        .payment-number {
+            font-size: 1.2rem;
+            word-break: break-all;
+            color: #74b9ff;
+        }
+        
+        .qris-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-top: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .music-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .music-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        
+        .music-btn {
+            background: linear-gradient(45deg, #6c5ce7, #a29bfe);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .music-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
+        }
+        
+        .footer {
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        @media (max-width: 600px) {
+            .payment-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .welcome-text {
+                font-size: 1.8rem;
+                white-space: normal;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Rain Effect -->
+    <div class="rain" id="rain"></div>
+    
+    <!-- Lightning Effect -->
+    <div class="lightning" id="lightning"></div>
+    
+    <div class="container">
+        <h1 class="welcome-text">Payment By<br>Renzz Hosting</h1>
+        
+        <button class="start-btn" id="startBtn">START</button>
+        
+        <div class="payment-section" id="paymentSection">
+            <h2 class="payment-title">PILIH METODE PEMBAYARAN</h2>
+            
+            <div class="payment-buttons">
+                <button class="payment-btn" data-payment="dana">
+                    <i class="fas fa-wallet"></i> DANA
+                </button>
+                <button class="payment-btn" data-payment="gopay">
+                    <i class="fab fa-google-pay"></i> GOPAY
+                </button>
+                <button class="payment-btn" data-payment="ovo">
+                    <i class="fas fa-mobile-alt"></i> OVO
+                </button>
+                <button class="payment-btn" data-payment="qris">
+                    <i class="fas fa-qrcode"></i> QRIS
+                </button>
+            </div>
+            
+            <div id="danaDetails" class="payment-details">
+                <h3>Nomor DANA</h3>
+                <p class="payment-number">082138395987</p>
+            </div>
+            
+            <div id="gopayDetails" class="payment-details">
+                <h3>Nomor GOPAY</h3>
+                <p class="payment-number">082138395987</p>
+            </div>
+            
+            <div id="ovoDetails" class="payment-details">
+                <h3>Nomor OVO</h3>
+                <p class="payment-number">082138395987</p>
+            </div>
+            
+            <div id="qrisDetails" class="payment-details">
+                <h3>QRIS Code</h3>
+                <p>Scan QR code berikut untuk pembayaran:</p>
+                <img src="https://files.catbox.moe/tzzsmb.jpg" alt="QRIS Code" class="qris-image">
+            </div>
+            
+            <div class="music-section">
+                <h3 class="payment-title">MUSIC</h3>
+                <div class="music-buttons">
+                    <button class="music-btn" data-music="https://files.catbox.moe/ceei9q.mp3">Parah</button>
+                    <button class="music-btn" data-music="https://files.catbox.moe/8smnze.mp3">Dj 8 Letters</button>
+                    <button class="music-btn" data-music="https://files.catbox.moe/unbo27.mp3">Tie me down</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            © Renzz Hosting
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const startBtn = document.getElementById('startBtn');
+            const paymentSection = document.getElementById('paymentSection');
+            const paymentButtons = document.querySelectorAll('.payment-btn');
+            const paymentDetails = document.querySelectorAll('.payment-details');
+            const musicButtons = document.querySelectorAll('.music-btn');
+            const rainContainer = document.getElementById('rain');
+            const lightning = document.getElementById('lightning');
+            
+            let audio = null;
+            
+            // Create rain effect
+            function createRain() {
+                const rainCount = 100;
+                
+                for (let i = 0; i < rainCount; i++) {
+                    const drop = document.createElement('div');
+                    drop.classList.add('drop');
+                    
+                    // Random properties for each rain drop
+                    const left = Math.random() * 100;
+                    const duration = Math.random() * 0.5 + 0.5;
+                    const delay = Math.random() * 2;
+                    const opacity = Math.random() * 0.5 + 0.3;
+                    const height = Math.random() * 20 + 10;
+                    
+                    drop.style.left = `${left}%`;
+                    drop.style.animationDuration = `${duration}s`;
+                    drop.style.animationDelay = `${delay}s`;
+                    drop.style.opacity = opacity;
+                    drop.style.height = `${height}px`;
+                    
+                    rainContainer.appendChild(drop);
+                }
+            }
+            
+            // Create lightning effect
+            function createLightning() {
+                setInterval(() => {
+                    // Random time between lightnings (5-15 seconds)
+                    const nextLightning = Math.random() * 10000 + 5000;
+                    
+                    setTimeout(() => {
+                        // Flash 2-4 times quickly
+                        const flashes = Math.floor(Math.random() * 3) + 2;
+                        
+                        const flash = (count) => {
+                            if (count >= flashes) return;
+                            
+                            lightning.style.opacity = '0.7';
+                            
+                            setTimeout(() => {
+                                lightning.style.opacity = '0';
+                                
+                                // Next flash after short delay
+                                setTimeout(() => {
+                                    flash(count + 1);
+                                }, Math.random() * 200);
+                            }, 50);
+                        };
+                        
+                        flash(0);
+                        
+                        // Play thunder sound if audio is available
+                        if (audio) {
+                            const thunder = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-thunder-strike-1680.mp3');
+                            thunder.volume = 0.3;
+                            thunder.play();
+                        }
+                        
+                    }, nextLightning);
+                }, 15000); // Initial delay
+            }
+            
+            // Initialize effects
+            createRain();
+            createLightning();
+            
+            // Show payment section when start button is clicked
+            startBtn.addEventListener('click', function() {
+                paymentSection.style.display = 'block';
+                startBtn.style.display = 'none';
+                
+                // Scroll to payment section
+                paymentSection.scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // Show payment details when payment button is clicked
+            paymentButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const paymentType = this.getAttribute('data-payment');
+                    
+                    // Hide all payment details first
+                    paymentDetails.forEach(detail => {
+                        detail.style.display = 'none';
+                    });
+                    
+                    // Show the selected payment details
+                    document.getElementById(`${paymentType}Details`).style.display = 'block';
+                    
+                    // Scroll to the details
+                    document.getElementById(`${paymentType}Details`).scrollIntoView({ behavior: 'smooth', block: 'center' });
+                });
+            });
+            
+            // Music player functionality
+            musicButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const musicSrc = this.getAttribute('data-music');
+                    
+                    // Stop current audio if playing
+                    if (audio) {
+                        audio.pause();
+                        audio.currentTime = 0;
+                    }
+                    
+                    // Play new audio
+                    audio = new Audio(musicSrc);
+                    audio.play();
+                    
+                    // Change button style to indicate playing
+                    musicButtons.forEach(btn => btn.style.background = 'linear-gradient(45deg, #6c5ce7, #a29bfe)');
+                    this.style.background = 'linear-gradient(45deg, #00b894, #55efc4)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
